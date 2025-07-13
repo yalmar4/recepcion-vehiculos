@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Recepción de Vehículos | Feral-Electric</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #0056b3;
+            --color-secundario: #003d7a;
+            --color-fondo: #f0f2f5;
+            --color-borde: #c0c0c0;
+            --color-sombra: rgba(0, 0, 0, 0.08);
+            --color-texto: #333;
+            --color-texto-ligero: #666;
+            --color-destacado: #eaf4ff;
+            --color-error: #dc3545;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+        }
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--color-sombra);
+            border: 1px solid #e0e0e0;
+        }
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--color-borde);
+        }
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-primario);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .info-orden {
+            text-align: right;
+            font-size: 14px;
+            color: var(--color-texto-ligero);
+            display: grid;
+            gap: 8px;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+        }
+        .info-orden div {
+            display: contents;
+        }
+        .info-orden strong {
+            color: var(--color-texto);
+            font-weight: 500;
+        }
+        .info-orden input {
+            width: 140px;
+            padding: 8px 12px;
+            border: 1px solid var(--color-borde);
+            border-radius: 6px;
+            background: #fff;
+            font-size: 14px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease-in-out;
+        }
+        .info-orden input:focus {
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+        }
+        h2 {
+            background: linear-gradient(to right, var(--color-primario), var(--color-secundario));
+            color: white;
+            padding: 18px;
+            margin: 0 0 30px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 10px var(--color-sombra);
+        }
+        fieldset {
+            margin-bottom: 30px;
+            border: 1px solid var(--color-borde);
+            padding: 25px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+        legend {
+            font-weight: 600;
+            color: var(--color-primario);
+            padding: 5px 15px;
+            font-size: 1.2em;
+            background: white;
+            border: 1px solid var(--color-borde);
+            border-radius: 25px;
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-texto);
+            font-size: 15px;
+        }
+        input, textarea, select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid var(--color-borde);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: var(--color-texto);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #fcfcfc;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--color-primario);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.18);
+            background-color: #fff;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: var(--color-destacado);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 86, 179, 0.1);
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            font-weight: 400;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            color: var(--color-texto);
+        }
+        .checkbox-group label:hover {
+            background: rgba(0, 86, 179, 0.1);
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            accent-color: var(--color-primario);
+            transform: scale(1.1);
+        }
+        button {
+            padding: 14px 28px;
+            background: var(--color-primario);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 17px;
+            margin: 10px;
+            width: calc(50% - 20px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.6px;
+            box-shadow: 0 3px 8px var(--color-sombra);
+        }
+        button:hover {
+            background: var(--color-secundario);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            border: 1px solid var(--color-borde);
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: crosshair;
+            width: 100%;
+            height: 200px;
+            touch-action: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .firma-container {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+        }
+        .botones-firma {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .botones-firma button {
+            width: auto;
+            min-width: 180px;
+            font-size: 15px;
+            padding: 10px 20px;
+            margin: 0;
+        }
+        .campo-requerido::after {
+            content: " *";
+            color: var(--color-error);
+            font-weight: bold;
+            margin-left: 2px;
+        }
+        .autorizaciones {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--color-destacado);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 86, 179, 0.1);
+        }
+        .autorizaciones label {
+            padding: 12px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 86, 179, 0.15);
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            color: var(--color-texto);
+            transition: background-color 0.2s ease-in-out;
+        }
+        .autorizaciones label:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .autorizaciones input[type="checkbox"] {
+            width: auto;
+            margin-right: 12px;
+            accent-color: var(--color-primario);
+            transform: scale(1.1);
+            margin-bottom: 0;
+        }
+        .form-message {
+            color: var(--color-error);
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .contenedor {
+                padding: 20px;
+                margin: 0 5px;
+                border-radius: 8px;
+            }
+            .encabezado {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .logo {
+                font-size: 26px;
+            }
+            .info-orden {
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            .info-orden input {
+                width: calc(100% - 24px);
+                margin: 5px auto;
+            }
+            h2 {
+                font-size: 1.4em;
+                padding: 15px;
+                margin-bottom: 25px;
+            }
+            fieldset {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+            legend {
+                font-size: 1.1em;
+                top: -12px;
+                left: 15px;
+            }
+            input, textarea, select {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+            }
+            .checkbox-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 8px;
+            }
+            .checkbox-group label {
+                padding: 8px;
+            }
+            button {
+                width: calc(100% - 20px);
+                margin: 8px 10px;
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+            .botones-firma {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            .botones-firma button {
+                width: calc(100% - 20px);
+                min-width: unset;
+            }
+            .autorizaciones {
+                padding: 12px;
+                gap: 10px;
+            }
+            .autorizaciones label {
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 1.2em;
+                padding: 12px;
+            }
+            legend {
+                font-size: 1em;
+            }
+            .checkbox-group {
+                padding: 5px;
+            }
+            .checkbox-group label {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <form id="formularioRecepcion">
+            <div class="encabezado">
+                <div class="logo">FERAL-ELECTRIC</div>
+                <div class="info-orden">
+                    <strong>Orden N°:</strong> <input type="text" name="numero_orden" required>
+                    <strong>F. Ingreso:</strong> <input type="date" name="fecha_ingreso" required>
+                    <strong>F. Entrega:</strong> <input type="date" name="fecha_entrega">
+                    <strong>Técnico:</strong> <input type="text" name="tecnico" required>
+                </div>
+            </div>
+
+            <h2>Orden de Servicio - Recepción de Vehículo</h2>
+            
+            <fieldset>
+                <legend>Datos del Cliente</legend>
+                <label class="campo-requerido">Nombre: 
+                    <input type="text" name="nombre" required>
+                </label>
+                <label>Dirección: 
+                    <input type="text" name="direccion">
+                </label>
+                <label class="campo-requerido">Teléfono: 
+                    <input type="tel" name="telefono" required>
+                </label>
+                <label>Email: 
+                    <input type="email" name="email">
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos del Vehículo</legend>
+                <label class="campo-requerido">Marca: 
+                    <input type="text" name="marca" required>
+                </label>
+                <label class="campo-requerido">Modelo: 
+                    <input type="text" name="modelo" required>
+                </label>
+                <label class="campo-requerido">Año: 
+                    <input type="number" name="anio" required min="1900" max="2099">
+                </label>
+                <label>Color: 
+                    <input type="text" name="color">
+                </label>
+                <label class="campo-requerido">Placas: 
+                    <input type="text" name="placas" required>
+                </label>
+                <label class="campo-requerido">VIN: 
+                    <input type="text" name="vin" required>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Descripción de la Falla</legend>
+                <label>Describa detalladamente la falla o servicio requerido:</label>
+                <textarea name="falla" rows="5" placeholder="Ej: No enciende, problemas eléctricos, mantenimiento general..."></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>Recepción del Vehículo</legend>
+                <label>Items verificados en la recepción:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="items" value="Espejo Izquierdo"> Espejo Izq.</label>
+                    <label><input type="checkbox" name="items" value="Espejo Derecho"> Espejo Der.</label>
+                    <label><input type="checkbox" name="items" value="Vidrios"> Vidrios</label>
+                    <label><input type="checkbox" name="items" value="Radio"> Radio</label>
+                    <label><input type="checkbox" name="items" value="Pantalla"> Pantalla</label>
+                    <label><input type="checkbox" name="items" value="Encendedor"> Encendedor</label>
+                    <label><input type="checkbox" name="items" value="Antena"> Antena</label>
+                    <label><input type="checkbox" name="items" value="Controles de Puertas"> Cont. de Puertas</label>
+                    <label><input type="checkbox" name="items" value="Cargador Celular"> Cargador Cel.</label>
+                    <label><input type="checkbox" name="items" value="Triángulos"> Triángulos</label>
+                    <label><input type="checkbox" name="items" value="Cubresol"> Cubresol</label>
+                    <label><input type="checkbox" name="items" value="Herramientas"> Herramientas</label>
+                    <label><input type="checkbox" name="items" value="Gato"> Gato</label>
+                    <label><input type="checkbox" name="items" value="Llanta de Refacción"> Llanta Refacción</label>
+                    <label><input type="checkbox" name="items" value="Faros/Lunas"> Faros/Lunas</label>
+                    <label><input type="checkbox" name="items" value="Tapa de Gasolina"> Tapa Gasolina</label>
+                    <label><input type="checkbox" name="items" value="Placas"> Placas</label>
+                    <label><input type="checkbox" name="items" value="Tapetes"> Tapetes</label>
+                    <label><input type="checkbox" name="items" value="Extintor"> Extintor</label>
+                    <label><input type="checkbox" name="items" value="Llave de Tuercas"> Llave Tuercas</label>
+                </div>
+                <label class="campo-requerido">Kilometraje: 
+                    <input type="number" name="kilometraje" required min="0">
+                </label>
+                <label class="campo-requerido">Nivel de Gasolina: 
+                    <select name="gasolina" required>
+                        <option value="">Seleccione...</option>
+                        <option value="V">Vacío</option>
+                        <option value="1/4">1/4 de tanque</option>
+                        <option value="1/2">1/2 tanque</option>
+                        <option value="3/4">3/4 de tanque</option>
+                        <option value="LL">Tanque lleno</option>
+                    </select>
+                </label>
+
+                <label style="margin-top: 20px;">Croquis de la Carrocería (Marque los desperfectos con el mouse o el dedo):</label>
+                <div style="border: 1px solid var(--color-borde); border-radius: 8px; overflow: hidden; margin-bottom: 10px; background-color: #f9f9f9;">
+                    <canvas id="croquisCanvas" style="width: 100%; display: block; height: 250px;"></canvas>
+                </div>
+                <div style="text-align: center;">
+                    <button type="button" onclick="limpiarCroquis()" style="background-color: #6c757d; margin-top: 5px; width: auto; padding: 10px 15px; font-size: 14px;">Limpiar Croquis</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Firma del Cliente</legend>
+                <div class="firma-container">
+                    <p style="color: var(--color-texto-ligero); font-size: 14px; margin-bottom: 15px;">Por favor, firme en el recuadro a continuación:</p>
+                    <canvas id="firmaCanvas"></canvas>
+                    <div class="botones-firma">
+                        <button type="button" onclick="limpiarFirma()" style="background-color: #6c757d;">Limpiar Firma</button>
+                        <button type="button" onclick="guardarFirmaComoImagen()" style="background-color: #28a745;">Guardar Firma</button>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Autorizaciones</legend>
+                <div class="autorizaciones">
+                    <label><input type="checkbox" name="autorizacion" value="presupuesto" required> Solicito presupuesto previo a cualquier reparación.</label>
+                    <label><input type="checkbox" name="autorizacion" value="sin_presupuesto"> Autorizo las reparaciones necesarias sin presupuesto previo hasta un límite de ($).</label>
+                    <label><input type="checkbox" name="autorizacion" value="conducir"> Autorizo conducir el vehículo para pruebas de diagnóstico y reparación.</label>
+                </div>
+            </fieldset>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit">Guardar PDF</button>
+                <button type="reset" onclick="limpiarFirma()" style="background-color: #ffc107; color: var(--color-texto);">Limpiar Formulario</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Configuración de jsPDF
+        const { jsPDF } = window.jspdf;
+
+        // Variables para el canvas de firma
+        const canvas = document.getElementById('firmaCanvas');
+        const ctx = canvas.getContext('2d');
+        let dibujando = false;
+        let ultimoX = 0;
+        let ultimoY = 0;
+
+        // Variables para el canvas del croquis
+        const croquisCanvas = document.getElementById('croquisCanvas');
+        const croquisCtx = croquisCanvas.getContext('2d');
+        let dibujandoCroquis = false;
+        let ultimoXCroquis = 0;
+        let ultimoYCroquis = 0;
+        let croquisBaseImage = null;
+
+        // Ajustar canvas para alta resolución y móviles (Firma)
+        function ajustarCanvas() {
+            const ratio = window.devicePixelRatio || 1;
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
+            
+            canvas.width = width * ratio;
+            canvas.height = height * ratio;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            
+            ctx.scale(ratio, ratio);
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#000000';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Imagen SVG base64 como fallback (evita problemas de CORS)
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
+
+        // Ajustar canvas del croquis
+        function ajustarCroquisCanvas(callback) {
+            const ratio = window.devicePixelRatio || 1;
+            const width = croquisCanvas.offsetWidth;
+            const height = croquisCanvas.offsetHeight;
+
+            croquisCanvas.width = width * ratio;
+            croquisCanvas.height = height * ratio;
+            croquisCanvas.style.width = width + 'px';
+            croquisCanvas.style.height = height + 'px';
+
+            croquisCtx.scale(ratio, ratio);
+            croquisCtx.lineWidth = 3;
+            croquisCtx.lineCap = 'round';
+            croquisCtx.lineJoin = 'round';
+            croquisCtx.strokeStyle = 'red';
+            croquisCtx.fillStyle = '#f9f9f9';
+            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height);
+
+            if (!croquisBaseImage) {
+                const img = new Image();
+                img.onload = function() {
+                    croquisBaseImage = img;
+                    drawImageOnCroquis();
+                    if (callback) callback();
+                };
+                img.onerror = function() {
+                    console.log("Usando imagen SVG integrada como fallback");
+                    const fallbackImg = new Image();
+                    fallbackImg.onload = function() {
+                        croquisBaseImage = fallbackImg;
+                        drawImageOnCroquis();
+                        if (callback) callback();
+                    };
+                    fallbackImg.src = IMAGEN_CROQUIS_BASE64;
+                };
+                
+                // Intenta cargar imagen local primero
+                img.src = 'croquis-vehiculo.png';
+            } else {
+                drawImageOnCroquis();
+                if (callback) callback();
+            }
+        }
+
+        function drawImageOnCroquis() {
+            if (!croquisBaseImage) return;
+
+            const width = croquisCanvas.offsetWidth;
+            const height = croquisCanvas.offsetHeight;
+            const imgRatio = croquisBaseImage.width / croquisBaseImage.height;
+            const canvasRatio = width / height;
+            let drawWidth = width;
+            let drawHeight = height;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            if (imgRatio > canvasRatio) {
+                drawHeight = width / imgRatio;
+                offsetY = (height - drawHeight) / 2;
+            } else {
+                drawWidth = height * imgRatio;
+                offsetX = (width - drawWidth) / 2;
+            }
+            
+            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height);
+            croquisCtx.drawImage(croquisBaseImage, offsetX, offsetY, drawWidth, drawHeight);
+        }
+
+        // Inicializar canvas al cargar
+        window.addEventListener('load', function() {
+            ajustarCanvas();
+            ajustarCroquisCanvas();
+        });
+
+        // Redimensionar al cambiar tamaño de ventana
+        window.addEventListener('resize', function() {
+            ajustarCanvas();
+            ajustarCroquisCanvas();
+        });
+
+        // [Resto de funciones JavaScript...]
+        // ... (Aquí irían todas las demás funciones del código original)
+        // Funciones para manejar la firma y dibujo en el croquis
+        function getPosicion(clientX, clientY, canvas) {
+            const rect = canvas.getBoundingClientRect();
+            const ratio = window.devicePixelRatio || 1;
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width) / ratio,
+                y: (clientY - rect.top) * (canvas.height / rect.height) / ratio
+            };
+        }
+
+        // Eventos para el canvas de firma
+        function empezarDibujo(e, canvas, ctx) {
+            const pos = getPosicion(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, canvas);
+            dibujando = true;
+            ultimoX = pos.x;
+            ultimoY = pos.y;
+            ctx.beginPath();
+        }
+
+        function dibujarLinea(e, canvas, ctx) {
+            if (!dibujando) return;
+            const pos = getPosicion(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, canvas);
+            
+            ctx.beginPath();
+            ctx.moveTo(ultimoX, ultimoY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            
+            ultimoX = pos.x;
+            ultimoY = pos.y;
+        }
+
+        // Configurar eventos para ambos canvas
+        function configurarEventosCanvas(canvasObj, ctxObj, isCroquis = false) {
+            const startEvent = isCroquis ? empezarDibujoCroquis : empezarDibujo;
+            const moveEvent = isCroquis ? dibujarLineaCroquis : dibujarLinea;
+            
+            // Eventos de ratón
+            canvasObj.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startEvent(e, canvasObj, ctxObj);
+            });
+            
+            canvasObj.addEventListener('mousemove', (e) => {
+                e.preventDefault();
+                moveEvent(e, canvasObj, ctxObj);
+            });
+            
+            canvasObj.addEventListener('mouseup', terminarDibujo);
+            canvasObj.addEventListener('mouseout', terminarDibujo);
+            
+            // Eventos táctiles
+            canvasObj.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startEvent(e, canvasObj, ctxObj);
+            });
+            
+            canvasObj.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                moveEvent(e, canvasObj, ctxObj);
+            });
+            
+            canvasObj.addEventListener('touchend', terminarDibujo);
+        }
+
+        // Configurar eventos para ambos canvas
+        configurarEventosCanvas(canvas, ctx);
+        configurarEventosCanvas(croquisCanvas, croquisCtx, true);
+
+        function terminarDibujo() {
+            dibujando = false;
+            dibujandoCroquis = false;
+        }
+
+        function empezarDibujoCroquis(e, canvas, ctx) {
+            const pos = getPosicion(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, canvas);
+            dibujandoCroquis = true;
+            ultimoXCroquis = pos.x;
+            ultimoYCroquis = pos.y;
+            ctx.beginPath();
+            ctx.moveTo(ultimoXCroquis, ultimoYCroquis);
+        }
+
+        function dibujarLineaCroquis(e, canvas, ctx) {
+            if (!dibujandoCroquis) return;
+            const pos = getPosicion(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, canvas);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ultimoXCroquis = pos.x;
+            ultimoYCroquis = pos.y;
+        }
+
+        function limpiarFirma() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function limpiarCroquis() {
+            ajustarCroquisCanvas();
+        }
+
+        function guardarFirmaComoImagen() {
+            if (esCanvasVacio(canvas)) {
+                alert('No hay firma para guardar');
+                return;
+            }
+            
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            
+            tempCtx.fillStyle = '#FFFFFF';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            const imagen = tempCanvas.toDataURL('image/png');
+            const enlace = document.createElement('a');
+            enlace.download = 'firma-cliente-' + new Date().toISOString().slice(0, 10) + '.png';
+            enlace.href = imagen;
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+        }
+
+        function obtenerFirmaComoImagen() {
+            return canvas.toDataURL('image/png');
+        }
+
+        function obtenerCroquisComoImagen() {
+            return croquisCanvas.toDataURL('image/png');
+        }
+
+        function esCanvasVacio(canvasObj) {
+            const context = canvasObj.getContext('2d');
+            const pixelBuffer = new Uint32Array(
+                context.getImageData(0, 0, canvasObj.width, canvasObj.height).data.buffer
+            );
+            return !pixelBuffer.some(color => color !== 0xFFFFFFFF);
+        }
+
+        function esCroquisVacioOriginal() {
+            if (!croquisBaseImage) return true;
+            
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = croquisCanvas.width;
+            tempCanvas.height = croquisCanvas.height;
+            tempCtx.drawImage(croquisBaseImage, 0, 0);
+            
+            const currentData = croquisCtx.getImageData(0, 0, croquisCanvas.width, croquisCanvas.height).data;
+            const baseData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
+            
+            for (let i = 0; i < currentData.length; i++) {
+                if (currentData[i] !== baseData[i]) return false;
+            }
+            return true;
+        }
+
+        function formatearFecha(fechaStr) {
+            if (!fechaStr) return 'N/A';
+            const fecha = new Date(fechaStr);
+            return fecha.toLocaleDateString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function getTextoGasolina(valor) {
+            const opciones = {
+                'V': 'Vacío',
+                '1/4': '1/4 de tanque',
+                '1/2': '1/2 tanque',
+                '3/4': '3/4 de tanque',
+                'LL': 'Tanque lleno'
+            };
+            return opciones[valor] || 'N/A';
+        }
+
+        function generarPDF(datos) {
+            const doc = new jsPDF();
+            
+            // Configuración inicial
+            doc.setFont('helvetica');
+            doc.setFontSize(12);
+            
+            // Encabezado
+            doc.setFontSize(18);
+            doc.setTextColor(0, 86, 179);
+            doc.text('FERAL-ELECTRIC', 105, 15, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setTextColor(80, 80, 80);
+            doc.text(`Orden N°: ${datos.numero_orden || 'N/A'}`, 14, 25);
+            doc.text(`Fecha Ingreso: ${formatearFecha(datos.fecha_ingreso)}`, 105, 25, { align: 'center' });
+            doc.text(`Fecha Entrega: ${formatearFecha(datos.fecha_entrega)}`, 190, 25, { align: 'right' });
+            doc.text(`Técnico: ${datos.tecnico || 'N/A'}`, 14, 30);
+            
+            // Título
+            doc.setFontSize(15);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Orden de Servicio - Recepción de Vehículo', 105, 45, { align: 'center' });
+            
+            // Datos del cliente
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Datos del Cliente', 14, 58);
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Nombre: ${datos.nombre || 'N/A'}`, 14, 66);
+            doc.text(`Dirección: ${datos.direccion || 'N/A'}`, 14, 71);
+            doc.text(`Teléfono: ${datos.telefono || 'N/A'}`, 14, 76);
+            doc.text(`Email: ${datos.email || 'N/A'}`, 14, 81);
+            
+            // Datos del vehículo
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Datos del Vehículo', 14, 91);
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Marca: ${datos.marca || 'N/A'}`, 14, 99);
+            doc.text(`Modelo: ${datos.modelo || 'N/A'}`, 14, 104);
+            doc.text(`Año: ${datos.anio || 'N/A'}`, 14, 109);
+            doc.text(`Color: ${datos.color || 'N/A'}`, 14, 114);
+            doc.text(`Placas: ${datos.placas || 'N/A'}`, 14, 119);
+            doc.text(`VIN: ${datos.vin || 'N/A'}`, 14, 124);
+            
+            // Descripción de la falla
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Descripción de la Falla', 14, 134);
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            const fallaLines = doc.splitTextToSize(datos.falla || 'No especificado', 180);
+            doc.text(fallaLines, 14, 142);
+            
+            // Recepción del vehículo
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Recepción del Vehículo', 14, 162);
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 170);
+            doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 175);
+            
+            // Items verificados
+            if (datos.items && datos.items.length > 0) {
+                doc.text('Items verificados:', 14, 185);
+                const itemsLines = doc.splitTextToSize(datos.items.join(', '), 180);
+                doc.text(itemsLines, 14, 190);
+            }
+            
+            // Croquis del vehículo
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Croquis de Carrocería', 14, 205);
+            if (datos.croquisImagen && !esCroquisVacioOriginal()) {
+                try {
+                    doc.addImage(datos.croquisImagen, 'PNG', 14, 210, 180, 70);
+                } catch (e) {
+                    doc.setFontSize(10);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text('No se marcaron desperfectos en el croquis.', 14, 220);
+                }
+            } else {
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text('No se marcaron desperfectos en el croquis.', 14, 220);
+            }
+
+            // Nueva página para firma y autorizaciones
+            doc.addPage();
+            let yPos = 15;
+            
+            // Firma del cliente
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Firma del Cliente', 14, yPos);
+            if (datos.firmaImagen && !esCanvasVacio(canvas)) {
+                try {
+                    doc.addImage(datos.firmaImagen, 'PNG', 14, yPos + 5, 80, 40);
+                    yPos += 45;
+                    doc.setFontSize(9);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('Firma del Cliente', 14, yPos);
+                    yPos += 10;
+                } catch (e) {
+                    doc.setFontSize(10);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text('______________________________', 14, yPos + 5);
+                    doc.text('Espacio para firma', 14, yPos + 10);
+                    yPos += 20;
+                }
+            } else {
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text('______________________________', 14, yPos + 5);
+                doc.text('Espacio para firma', 14, yPos + 10);
+                yPos += 20;
+            }
+
+            // Autorizaciones
+            doc.setFontSize(13);
+            doc.setTextColor(0, 86, 179);
+            doc.text('Autorizaciones', 14, yPos + 10);
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Solicito presupuesto previo: ${datos.autorizacion?.includes('presupuesto') ? 'SÍ' : 'NO'}`, 14, yPos + 18);
+            doc.text(`Autorizo sin presupuesto: ${datos.autorizacion?.includes('sin_presupuesto') ? 'SÍ' : 'NO'}`, 14, yPos + 23);
+            doc.text(`Autorizo conducir para pruebas: ${datos.autorizacion?.includes('conducir') ? 'SÍ' : 'NO'}`, 14, yPos + 28);
+            
+            // Guardar PDF
+            const nombreTecnico = datos.tecnico ? datos.tecnico.replace(/\s+/g, '_') : 'SinTecnico';
+            const numeroOrden = datos.numero_orden ? datos.numero_orden.replace(/\s+/g, '_') : 'SinOrden';
+            const fechaActual = new Date().toISOString().slice(0, 10);
+            
+            doc.save(`Orden_${numeroOrden}_Tec_${nombreTecnico}_${fechaActual}.pdf`);
+        }
+
+        // Manejar envío del formulario
+        document.getElementById('formularioRecepcion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (esCanvasVacio(canvas)) {
+                alert('Por favor, proporcione su firma para completar la recepción.');
+                return;
+            }
+
+            // Validar campos requeridos
+            const requiredInputs = document.querySelectorAll('#formularioRecepcion [required]');
+            let allValid = true;
+            requiredInputs.forEach(input => {
+                if (!input.value) {
+                    input.style.borderColor = 'var(--color-error)';
+                    allValid = false;
+                } else {
+                    input.style.borderColor = 'var(--color-borde)';
+                }
+            });
+
+            // Validar autorizaciones
+            const autorizaciones = document.querySelectorAll('input[name="autorizacion"]');
+            let algunaAutorizacionSeleccionada = false;
+            autorizaciones.forEach(checkbox => {
+                if (checkbox.checked) {
+                    algunaAutorizacionSeleccionada = true;
+                }
+            });
+
+            if (!algunaAutorizacionSeleccionada) {
+                alert('Debe seleccionar al menos una autorización.');
+                allValid = false;
+            }
+
+            if (allValid) {
+                const datos = obtenerDatosFormulario();
+                generarPDF(datos);
+            } else {
+                alert('Por favor, complete todos los campos requeridos y seleccione al menos una autorización.');
+            }
+        });
+
+        function obtenerDatosFormulario() {
+            const form = document.getElementById('formularioRecepcion');
+            const formData = new FormData(form);
+            const datos = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key === 'items' || key === 'autorizacion') {
+                    if (!datos[key]) datos[key] = [];
+                    datos[key].push(value);
+                } else {
+                    datos[key] = value;
+                }
+            }
+            
+            datos.firmaImagen = obtenerFirmaComoImagen();
+            datos.croquisImagen = obtenerCroquisComoImagen();
+            
+            return datos;
+        }
+
+        // Limpiar al resetear formulario
+        document.getElementById('formularioRecepcion').addEventListener('reset', function() {
+            setTimeout(() => {
+                limpiarFirma();
+                limpiarCroquis();
+                
+                document.querySelectorAll('#formularioRecepcion [required]').forEach(input => {
+                    input.style.borderColor = 'var(--color-borde)';
+                });
+            }, 0);
+        });
+    </script>
+</body>
+</html>

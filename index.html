@@ -274,6 +274,22 @@
             margin-bottom: 10px;
             display: none;
         }
+        
+        /* Nuevos estilos para el sistema de acceso */
+        .acceso-denegado {
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+            color: var(--color-error);
+        }
+        .acceso-concedido {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -373,7 +389,7 @@
 </head>
 <body>
     <div class="contenedor">
-        <form id="formularioRecepcion">
+        <form id="formularioRecepcion" style="display:none;">
             <div class="encabezado">
                 <div class="logo">FERAL-ELECTRIC</div>
                 <div class="info-orden">
@@ -504,9 +520,45 @@
                 <button type="reset" onclick="limpiarFirma()" style="background-color: #ffc107; color: var(--color-texto);">Limpiar Formulario</button>
             </div>
         </form>
+        <div id="mensajeAcceso" class="acceso-denegado" style="display:none;">
+            Acceso no autorizado. Por favor contacte al administrador.
+        </div>
     </div>
 
     <script>
+        // ===== SISTEMA DE AUTENTICACIÓN =====
+        const CODIGO_ACCESO = "online01";
+        const MAX_INTENTOS = 3;
+        
+        function verificarAcceso() {
+            let intentos = MAX_INTENTOS;
+            let accesoConcedido = false;
+            
+            while (intentos > 0 && !accesoConcedido) {
+                const codigoIngresado = prompt(`Ingrese el código de acceso (Intentos restantes: ${intentos}):`);
+                
+                if (codigoIngresado === CODIGO_ACCESO) {
+                    accesoConcedido = true;
+                    document.getElementById('formularioRecepcion').style.display = 'block';
+                    document.getElementById('formularioRecepcion').classList.add('acceso-concedido');
+                    return;
+                } else {
+                    intentos--;
+                    if (intentos > 0) {
+                        alert(`Código incorrecto. Te quedan ${intentos} intentos.`);
+                    }
+                }
+            }
+            
+            if (!accesoConcedido) {
+                document.getElementById('mensajeAcceso').style.display = 'block';
+            }
+        }
+        
+        // Ejecutar verificación de acceso al cargar la página
+        window.addEventListener('DOMContentLoaded', verificarAcceso);
+        // ===== FIN SISTEMA DE AUTENTICACIÓN =====
+
         // Configuración de jsPDF
         const { jsPDF } = window.jspdf;
 
@@ -524,6 +576,9 @@
         let ultimoXCroquis = 0;
         let ultimoYCroquis = 0;
         let croquisBaseImage = null;
+
+        // Imagen SVG base64 como fallback (evita problemas de CORS)
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Ajustar canvas para alta resolución y móviles (Firma)
         function ajustarCanvas() {
@@ -544,9 +599,6 @@
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-
-        // Imagen SVG base64 como fallback (evita problemas de CORS)
-        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Ajustar canvas del croquis
         function ajustarCroquisCanvas(callback) {
@@ -629,9 +681,6 @@
             ajustarCroquisCanvas();
         });
 
-        // [Resto de funciones JavaScript...]
-        // ... (Aquí irían todas las demás funciones del código original)
-        // Funciones para manejar la firma y dibujo en el croquis
         function getPosicion(clientX, clientY, canvas) {
             const rect = canvas.getBoundingClientRect();
             const ratio = window.devicePixelRatio || 1;

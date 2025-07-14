@@ -45,13 +45,23 @@
             padding-bottom: 20px;
             border-bottom: 1px solid var(--color-borde);
         }
-        .logo {
+        /* ESTILOS PARA EL LOGO DE IMAGEN */
+        .logo-imagen {
+            max-width: 300px; /* Tamaño máximo aún más grande */
+            height: auto;
+            display: block; /* Para que ocupe su propio bloque y se pueda centrar */
+            margin: 0 auto; /* Centra el logo horizontalmente */
+        }
+        /* FIN ESTILOS PARA EL LOGO DE IMAGEN */
+
+        /* Puedes eliminar o mantener el .logo si aún quieres tener la opción de texto */
+        /* .logo {
             font-size: 32px;
             font-weight: 700;
             color: var(--color-primario);
             letter-spacing: 1px;
             text-transform: uppercase;
-        }
+        } */
         .info-orden {
             text-align: right;
             font-size: 14px;
@@ -171,11 +181,15 @@
         .checkbox-group label:hover {
             background: rgba(0, 86, 179, 0.1);
         }
-        .checkbox-group input[type="checkbox"] {
+        .checkbox-group input:hover {
+            cursor: pointer;
+        }
+        .checkbox-group input {
             width: auto;
             margin-right: 10px;
             accent-color: var(--color-primario);
             transform: scale(1.1);
+            cursor: pointer;
         }
         button {
             padding: 14px 28px;
@@ -256,16 +270,21 @@
             font-weight: 400;
             color: var(--color-texto);
             transition: background-color 0.2s ease-in-out;
+            cursor: pointer;
         }
         .autorizaciones label:hover {
             background-color: rgba(255, 255, 255, 0.9);
         }
-        .autorizaciones input[type="checkbox"] {
+        .autorizaciones input:hover {
+            cursor: pointer;
+        }
+        .autorizaciones input {
             width: auto;
             margin-right: 12px;
             accent-color: var(--color-primario);
             transform: scale(1.1);
             margin-bottom: 0;
+            cursor: pointer;
         }
         .form-message {
             color: var(--color-error);
@@ -274,22 +293,6 @@
             margin-bottom: 10px;
             display: none;
         }
-        
-        /* Nuevos estilos para el sistema de acceso */
-        .acceso-denegado {
-            text-align: center;
-            padding: 50px;
-            font-size: 24px;
-            color: var(--color-error);
-        }
-        .acceso-concedido {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -305,9 +308,16 @@
                 gap: 20px;
                 margin-bottom: 20px;
             }
-            .logo {
-                font-size: 26px;
+            /* Ajuste del logo para móviles */
+            .logo-imagen {
+                max-width: 220px; /* Un poco más grande en móviles */
+                margin: 0 auto; /* Para centrarlo si es necesario */
             }
+            /* Fin ajuste del logo para móviles */
+
+            /* .logo {
+                font-size: 26px;
+            } */
             .info-orden {
                 text-align: center;
                 width: 100%;
@@ -368,8 +378,11 @@
             }
         }
         @media (max-width: 480px) {
-            .logo {
+            /* .logo {
                 font-size: 22px;
+            } */
+            .logo-imagen {
+                max-width: 250px; /* Tamaño más grande para pantallas muy pequeñas */
             }
             h2 {
                 font-size: 1.2em;
@@ -389,9 +402,9 @@
 </head>
 <body>
     <div class="contenedor">
-        <form id="formularioRecepcion" style="display:none;">
+        <form id="formularioRecepcion">
             <div class="encabezado">
-                <div class="logo">FERAL-ELECTRIC</div>
+                <img src="logo.png" alt="Logo de Feral-Electric" class="logo-imagen">
                 <div class="info-orden">
                     <strong>Orden N°:</strong> <input type="text" name="numero_orden" required>
                     <strong>F. Ingreso:</strong> <input type="date" name="fecha_ingreso" required>
@@ -401,41 +414,41 @@
             </div>
 
             <h2>Orden de Servicio - Recepción de Vehículo</h2>
-            
+
             <fieldset>
                 <legend>Datos del Cliente</legend>
-                <label class="campo-requerido">Nombre: 
+                <label class="campo-requerido">Nombre:
                     <input type="text" name="nombre" required>
                 </label>
-                <label>Dirección: 
+                <label>Dirección:
                     <input type="text" name="direccion">
                 </label>
-                <label class="campo-requerido">Teléfono: 
+                <label class="campo-requerido">Teléfono:
                     <input type="tel" name="telefono" required>
                 </label>
-                <label>Email: 
+                <label>Email:
                     <input type="email" name="email">
                 </label>
             </fieldset>
 
             <fieldset>
                 <legend>Datos del Vehículo</legend>
-                <label class="campo-requerido">Marca: 
+                <label class="campo-requerido">Marca:
                     <input type="text" name="marca" required>
                 </label>
-                <label class="campo-requerido">Modelo: 
+                <label class="campo-requerido">Modelo:
                     <input type="text" name="modelo" required>
                 </label>
-                <label class="campo-requerido">Año: 
+                <label class="campo-requerido">Año:
                     <input type="number" name="anio" required min="1900" max="2099">
                 </label>
-                <label>Color: 
+                <label>Color:
                     <input type="text" name="color">
                 </label>
-                <label class="campo-requerido">Placas: 
+                <label class="campo-requerido">Placas:
                     <input type="text" name="placas" required>
                 </label>
-                <label class="campo-requerido">VIN: 
+                <label class="campo-requerido">VIN:
                     <input type="text" name="vin" required>
                 </label>
             </fieldset>
@@ -471,10 +484,10 @@
                     <label><input type="checkbox" name="items" value="Extintor"> Extintor</label>
                     <label><input type="checkbox" name="items" value="Llave de Tuercas"> Llave Tuercas</label>
                 </div>
-                <label class="campo-requerido">Kilometraje: 
+                <label class="campo-requerido">Kilometraje:
                     <input type="number" name="kilometraje" required min="0">
                 </label>
-                <label class="campo-requerido">Nivel de Gasolina: 
+                <label class="campo-requerido">Nivel de Gasolina:
                     <select name="gasolina" required>
                         <option value="">Seleccione...</option>
                         <option value="V">Vacío</option>
@@ -520,45 +533,9 @@
                 <button type="reset" onclick="limpiarFirma()" style="background-color: #ffc107; color: var(--color-texto);">Limpiar Formulario</button>
             </div>
         </form>
-        <div id="mensajeAcceso" class="acceso-denegado" style="display:none;">
-            Acceso no autorizado. Por favor contacte al administrador.
-        </div>
     </div>
 
     <script>
-        // ===== SISTEMA DE AUTENTICACIÓN =====
-        const CODIGO_ACCESO = "online01";
-        const MAX_INTENTOS = 3;
-        
-        function verificarAcceso() {
-            let intentos = MAX_INTENTOS;
-            let accesoConcedido = false;
-            
-            while (intentos > 0 && !accesoConcedido) {
-                const codigoIngresado = prompt(`Ingrese el código de acceso (Intentos restantes: ${intentos}):`);
-                
-                if (codigoIngresado === CODIGO_ACCESO) {
-                    accesoConcedido = true;
-                    document.getElementById('formularioRecepcion').style.display = 'block';
-                    document.getElementById('formularioRecepcion').classList.add('acceso-concedido');
-                    return;
-                } else {
-                    intentos--;
-                    if (intentos > 0) {
-                        alert(`Código incorrecto. Te quedan ${intentos} intentos.`);
-                    }
-                }
-            }
-            
-            if (!accesoConcedido) {
-                document.getElementById('mensajeAcceso').style.display = 'block';
-            }
-        }
-        
-        // Ejecutar verificación de acceso al cargar la página
-        window.addEventListener('DOMContentLoaded', verificarAcceso);
-        // ===== FIN SISTEMA DE AUTENTICACIÓN =====
-
         // Configuración de jsPDF
         const { jsPDF } = window.jspdf;
 
@@ -577,20 +554,17 @@
         let ultimoYCroquis = 0;
         let croquisBaseImage = null;
 
-        // Imagen SVG base64 como fallback (evita problemas de CORS)
-        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
-
         // Ajustar canvas para alta resolución y móviles (Firma)
         function ajustarCanvas() {
             const ratio = window.devicePixelRatio || 1;
             const width = canvas.offsetWidth;
             const height = canvas.offsetHeight;
-            
+
             canvas.width = width * ratio;
             canvas.height = height * ratio;
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
-            
+
             ctx.scale(ratio, ratio);
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
@@ -599,6 +573,9 @@
             ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
+
+        // Imagen SVG base64 como fallback (evita problemas de CORS)
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMy9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Ajustar canvas del croquis
         function ajustarCroquisCanvas(callback) {
@@ -636,7 +613,7 @@
                     };
                     fallbackImg.src = IMAGEN_CROQUIS_BASE64;
                 };
-                
+
                 // Intenta cargar imagen local primero
                 img.src = 'croquis-vehiculo.png';
             } else {
@@ -664,7 +641,7 @@
                 drawWidth = height * imgRatio;
                 offsetX = (width - drawWidth) / 2;
             }
-            
+
             croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height);
             croquisCtx.drawImage(croquisBaseImage, offsetX, offsetY, drawWidth, drawHeight);
         }
@@ -681,6 +658,9 @@
             ajustarCroquisCanvas();
         });
 
+        // [Resto de funciones JavaScript...]
+        // ... (Aquí irían todas las demás funciones del código original)
+        // Funciones para manejar la firma y dibujo en el croquis
         function getPosicion(clientX, clientY, canvas) {
             const rect = canvas.getBoundingClientRect();
             const ratio = window.devicePixelRatio || 1;
@@ -702,12 +682,12 @@
         function dibujarLinea(e, canvas, ctx) {
             if (!dibujando) return;
             const pos = getPosicion(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, canvas);
-            
+
             ctx.beginPath();
             ctx.moveTo(ultimoX, ultimoY);
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
-            
+
             ultimoX = pos.x;
             ultimoY = pos.y;
         }
@@ -716,32 +696,32 @@
         function configurarEventosCanvas(canvasObj, ctxObj, isCroquis = false) {
             const startEvent = isCroquis ? empezarDibujoCroquis : empezarDibujo;
             const moveEvent = isCroquis ? dibujarLineaCroquis : dibujarLinea;
-            
+
             // Eventos de ratón
             canvasObj.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 startEvent(e, canvasObj, ctxObj);
             });
-            
+
             canvasObj.addEventListener('mousemove', (e) => {
                 e.preventDefault();
                 moveEvent(e, canvasObj, ctxObj);
             });
-            
+
             canvasObj.addEventListener('mouseup', terminarDibujo);
             canvasObj.addEventListener('mouseout', terminarDibujo);
-            
+
             // Eventos táctiles
             canvasObj.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 startEvent(e, canvasObj, ctxObj);
             });
-            
+
             canvasObj.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 moveEvent(e, canvasObj, ctxObj);
             });
-            
+
             canvasObj.addEventListener('touchend', terminarDibujo);
         }
 
@@ -787,16 +767,16 @@
                 alert('No hay firma para guardar');
                 return;
             }
-            
+
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             tempCanvas.width = canvas.width;
             tempCanvas.height = canvas.height;
-            
+
             tempCtx.fillStyle = '#FFFFFF';
             tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
             tempCtx.drawImage(canvas, 0, 0);
-            
+
             const imagen = tempCanvas.toDataURL('image/png');
             const enlace = document.createElement('a');
             enlace.download = 'firma-cliente-' + new Date().toISOString().slice(0, 10) + '.png';
@@ -824,16 +804,16 @@
 
         function esCroquisVacioOriginal() {
             if (!croquisBaseImage) return true;
-            
+
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             tempCanvas.width = croquisCanvas.width;
             tempCanvas.height = croquisCanvas.height;
             tempCtx.drawImage(croquisBaseImage, 0, 0);
-            
+
             const currentData = croquisCtx.getImageData(0, 0, croquisCanvas.width, croquisCanvas.height).data;
             const baseData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-            
+
             for (let i = 0; i < currentData.length; i++) {
                 if (currentData[i] !== baseData[i]) return false;
             }
@@ -863,27 +843,42 @@
 
         function generarPDF(datos) {
             const doc = new jsPDF();
-            
+
             // Configuración inicial
             doc.setFont('helvetica');
             doc.setFontSize(12);
-            
+
             // Encabezado
-            doc.setFontSize(18);
-            doc.setTextColor(0, 86, 179);
-            doc.text('FERAL-ELECTRIC', 105, 15, { align: 'center' });
+            // Agregar el logo al PDF
+            if (datos.logoImagen) {
+                try {
+                    doc.addImage(datos.logoImagen, 'PNG', 14, 10, 50, 20); // Ajusta las coordenadas y tamaño según necesites
+                } catch (e) {
+                    console.error("Error al añadir la imagen del logo al PDF:", e);
+                    // Fallback si la imagen no se carga
+                    doc.setFontSize(18);
+                    doc.setTextColor(0, 86, 179);
+                    doc.text('FERAL-ELECTRIC', 105, 15, { align: 'center' });
+                }
+            } else {
+                // Si no hay logo o falla, usa el texto
+                doc.setFontSize(18);
+                doc.setTextColor(0, 86, 179);
+                doc.text('FERAL-ELECTRIC', 105, 15, { align: 'center' });
+            }
+
             doc.setFontSize(10);
             doc.setTextColor(80, 80, 80);
             doc.text(`Orden N°: ${datos.numero_orden || 'N/A'}`, 14, 25);
             doc.text(`Fecha Ingreso: ${formatearFecha(datos.fecha_ingreso)}`, 105, 25, { align: 'center' });
             doc.text(`Fecha Entrega: ${formatearFecha(datos.fecha_entrega)}`, 190, 25, { align: 'right' });
             doc.text(`Técnico: ${datos.tecnico || 'N/A'}`, 14, 30);
-            
+
             // Título
             doc.setFontSize(15);
             doc.setTextColor(0, 0, 0);
             doc.text('Orden de Servicio - Recepción de Vehículo', 105, 45, { align: 'center' });
-            
+
             // Datos del cliente
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -894,7 +889,7 @@
             doc.text(`Dirección: ${datos.direccion || 'N/A'}`, 14, 71);
             doc.text(`Teléfono: ${datos.telefono || 'N/A'}`, 14, 76);
             doc.text(`Email: ${datos.email || 'N/A'}`, 14, 81);
-            
+
             // Datos del vehículo
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -907,7 +902,7 @@
             doc.text(`Color: ${datos.color || 'N/A'}`, 14, 114);
             doc.text(`Placas: ${datos.placas || 'N/A'}`, 14, 119);
             doc.text(`VIN: ${datos.vin || 'N/A'}`, 14, 124);
-            
+
             // Descripción de la falla
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -916,7 +911,7 @@
             doc.setTextColor(0, 0, 0);
             const fallaLines = doc.splitTextToSize(datos.falla || 'No especificado', 180);
             doc.text(fallaLines, 14, 142);
-            
+
             // Recepción del vehículo
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -925,14 +920,14 @@
             doc.setTextColor(0, 0, 0);
             doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 170);
             doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 175);
-            
+
             // Items verificados
             if (datos.items && datos.items.length > 0) {
                 doc.text('Items verificados:', 14, 185);
                 const itemsLines = doc.splitTextToSize(datos.items.join(', '), 180);
                 doc.text(itemsLines, 14, 190);
             }
-            
+
             // Croquis del vehículo
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -954,7 +949,7 @@
             // Nueva página para firma y autorizaciones
             doc.addPage();
             let yPos = 15;
-            
+
             // Firma del cliente
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
@@ -991,19 +986,19 @@
             doc.text(`Solicito presupuesto previo: ${datos.autorizacion?.includes('presupuesto') ? 'SÍ' : 'NO'}`, 14, yPos + 18);
             doc.text(`Autorizo sin presupuesto: ${datos.autorizacion?.includes('sin_presupuesto') ? 'SÍ' : 'NO'}`, 14, yPos + 23);
             doc.text(`Autorizo conducir para pruebas: ${datos.autorizacion?.includes('conducir') ? 'SÍ' : 'NO'}`, 14, yPos + 28);
-            
+
             // Guardar PDF
             const nombreTecnico = datos.tecnico ? datos.tecnico.replace(/\s+/g, '_') : 'SinTecnico';
             const numeroOrden = datos.numero_orden ? datos.numero_orden.replace(/\s+/g, '_') : 'SinOrden';
             const fechaActual = new Date().toISOString().slice(0, 10);
-            
+
             doc.save(`Orden_${numeroOrden}_Tec_${nombreTecnico}_${fechaActual}.pdf`);
         }
 
         // Manejar envío del formulario
         document.getElementById('formularioRecepcion').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             if (esCanvasVacio(canvas)) {
                 alert('Por favor, proporcione su firma para completar la recepción.');
                 return;
@@ -1047,7 +1042,7 @@
             const form = document.getElementById('formularioRecepcion');
             const formData = new FormData(form);
             const datos = {};
-            
+
             for (let [key, value] of formData.entries()) {
                 if (key === 'items' || key === 'autorizacion') {
                     if (!datos[key]) datos[key] = [];
@@ -1056,10 +1051,31 @@
                     datos[key] = value;
                 }
             }
-            
+
             datos.firmaImagen = obtenerFirmaComoImagen();
             datos.croquisImagen = obtenerCroquisComoImagen();
-            
+
+            // Capturar el logo para el PDF
+            const logoElement = document.querySelector('.logo-imagen');
+            if (logoElement && logoElement.src) {
+                const img = new Image();
+                img.onload = () => {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = img.naturalWidth;
+                    tempCanvas.height = img.naturalHeight;
+                    tempCtx.drawImage(img, 0, 0);
+                    datos.logoImagen = tempCanvas.toDataURL('image/png');
+                };
+                img.onerror = () => {
+                    console.error("No se pudo cargar la imagen del logo para el PDF.");
+                    datos.logoImagen = null; // En caso de error, no adjuntar la imagen
+                };
+                img.src = logoElement.src;
+            } else {
+                datos.logoImagen = null;
+            }
+
             return datos;
         }
 
@@ -1068,7 +1084,7 @@
             setTimeout(() => {
                 limpiarFirma();
                 limpiarCroquis();
-                
+
                 document.querySelectorAll('#formularioRecepcion [required]').forEach(input => {
                     input.style.borderColor = 'var(--color-borde)';
                 });

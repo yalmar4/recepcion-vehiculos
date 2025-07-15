@@ -534,7 +534,7 @@
         let croquisStrokes = [];
         let currentCroquisStroke = [];
 
-        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMy9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTJaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMy9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Helper to get mouse/touch position relative to canvas
         function getPosicion(clientX, clientY, canvasElement) {
@@ -569,44 +569,28 @@
             });
         }
 
-        // CORRECTED: Ensure image drawing is scaled by devicePixelRatio
         function drawImageOnCroquis() {
             if (!croquisBaseImage) return;
 
-            const ratio = window.devicePixelRatio || 1;
-            const canvasCssWidth = croquisCanvas.offsetWidth;
-            const canvasCssHeight = croquisCanvas.offsetHeight;
-
-            // Calculate drawing dimensions based on CSS dimensions for aspect ratio fitting
+            const width = croquisCanvas.offsetWidth;
+            const height = croquisCanvas.offsetHeight;
             const imgRatio = croquisBaseImage.width / croquisBaseImage.height;
-            const canvasRatio = canvasCssWidth / canvasCssHeight;
+            const canvasRatio = width / height;
+            let drawWidth = width;
+            let drawHeight = height;
+            let offsetX = 0;
+            let offsetY = 0;
 
-            let drawCssWidth = canvasCssWidth;
-            let drawCssHeight = canvasCssHeight;
-            let offsetXCss = 0;
-            let offsetYCss = 0;
-
-            if (imgRatio > canvasRatio) { // Image is wider than canvas ratio, fit by width
-                drawCssHeight = canvasCssWidth / imgRatio;
-                offsetYCss = (canvasCssHeight - drawCssHeight) / 2;
-            } else { // Image is taller than canvas ratio, fit by height
-                drawCssWidth = canvasCssHeight * imgRatio;
-                offsetXCss = (canvasCssWidth - drawCssWidth) / 2;
+            if (imgRatio > canvasRatio) {
+                drawHeight = width / imgRatio;
+                offsetY = (height - drawHeight) / 2;
+            } else {
+                drawWidth = height * imgRatio;
+                offsetX = (width - drawWidth) / 2;
             }
 
-            // Clear the entire canvas using its actual pixel dimensions
-            croquisCtx.clearRect(0, 0, croquisCanvas.width, croquisCanvas.height);
-            croquisCtx.fillStyle = '#f9f9f9'; // Fill with background color
-            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height);
-
-            // Draw the image scaled by devicePixelRatio
-            croquisCtx.drawImage(
-                croquisBaseImage,
-                offsetXCss * ratio, // Scale offset X
-                offsetYCss * ratio, // Scale offset Y
-                drawCssWidth * ratio, // Scale draw width
-                drawCssHeight * ratio // Scale draw height
-            );
+            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height); // Clear
+            croquisCtx.drawImage(croquisBaseImage, offsetX, offsetY, drawWidth, drawHeight);
         }
 
         function redrawCroquis() {

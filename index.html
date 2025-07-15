@@ -147,7 +147,7 @@
         }
         .checkbox-group {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Adjusted for radio buttons */
             gap: 12px;
             margin: 20px 0;
             padding: 10px;
@@ -155,31 +155,44 @@
             border-radius: 8px;
             border: 1px solid rgba(0, 86, 179, 0.1);
         }
-        .checkbox-group label {
+        .checkbox-group .item-row { /* New class for each item row */
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Space out item name and radios */
             margin: 0;
             font-weight: 400;
             font-size: 14px;
             padding: 10px;
             border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 86, 179, 0.15);
             color: var(--color-texto);
         }
-        .checkbox-group label:hover {
-            background: rgba(0, 86, 179, 0.1);
+        .checkbox-group .item-name {
+            flex-grow: 1; /* Allow item name to take available space */
         }
-        .checkbox-group input:hover {
+        .checkbox-group .radio-options {
+            display: flex;
+            gap: 10px; /* Space between Yes/No radios */
+        }
+        .checkbox-group .radio-option {
+            display: flex;
+            align-items: center;
             cursor: pointer;
         }
-        .checkbox-group input {
+        .checkbox-group input[type="radio"] {
             width: auto;
-            margin-right: 10px;
+            margin-right: 5px; /* Adjust margin for radios */
             accent-color: var(--color-primario);
             transform: scale(1.1);
             cursor: pointer;
+            margin-bottom: 0; /* Remove bottom margin from general input rule */
         }
+        .checkbox-group .radio-option label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
         button {
             padding: 14px 28px;
             background: var(--color-primario);
@@ -334,8 +347,17 @@
                 gap: 8px;
                 padding: 8px;
             }
-            .checkbox-group label {
+            .checkbox-group .item-row {
+                flex-direction: column; /* Stack item name and radios */
+                align-items: flex-start;
                 padding: 8px;
+            }
+            .checkbox-group .item-name {
+                margin-bottom: 5px;
+            }
+            .checkbox-group .radio-options {
+                width: 100%;
+                justify-content: flex-end; /* Align radios to the right */
             }
             button {
                 width: calc(100% - 20px);
@@ -374,7 +396,7 @@
             .checkbox-group {
                 padding: 5px;
             }
-            .checkbox-group label {
+            .checkbox-group .item-row {
                 font-size: 13px;
             }
         }
@@ -443,26 +465,153 @@
                 <legend>Recepción del Vehículo</legend>
                 <label>Items verificados en la recepción:</label>
                 <div class="checkbox-group">
-                    <label><input type="checkbox" name="items" value="Espejo Izquierdo"> Espejo Izq.</label>
-                    <label><input type="checkbox" name="items" value="Espejo Derecho"> Espejo Der.</label>
-                    <label><input type="checkbox" name="items" value="Vidrios"> Vidrios</label>
-                    <label><input type="checkbox" name="items" value="Radio"> Radio</label>
-                    <label><input type="checkbox" name="items" value="Pantalla"> Pantalla</label>
-                    <label><input type="checkbox" name="items" value="Encendedor"> Encendedor</label>
-                    <label><input type="checkbox" name="items" value="Antena"> Antena</label>
-                    <label><input type="checkbox" name="items" value="Controles de Puertas"> Cont. de Puertas</label>
-                    <label><input type="checkbox" name="items" value="Cargador Celular"> Cargador Cel.</label>
-                    <label><input type="checkbox" name="items" value="Triángulos"> Triángulos</label>
-                    <label><input type="checkbox" name="items" value="Cubresol"> Cubresol</label>
-                    <label><input type="checkbox" name="items" value="Herramientas"> Herramientas</label>
-                    <label><input type="checkbox" name="items" value="Gato"> Gato</label>
-                    <label><input type="checkbox" name="items" value="Llanta de Refacción"> Llanta Refacción</label>
-                    <label><input type="checkbox" name="items" value="Faros/Lunas"> Faros/Lunas</label>
-                    <label><input type="checkbox" name="items" value="Tapa de Gasolina"> Tapa Gasolina</label>
-                    <label><input type="checkbox" name="items" value="Placas"> Placas</label>
-                    <label><input type="checkbox" name="items" value="Tapetes"> Tapetes</label>
-                    <label><input type="checkbox" name="items" value="Extintor"> Extintor</label>
-                    <label><input type="checkbox" name="items" value="Llave de Tuercas"> Llave Tuercas</label>
+                    <div class="item-row">
+                        <span class="item-name">Espejo Izquierdo</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_espejo_izquierdo" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_espejo_izquierdo" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Espejo Derecho</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_espejo_derecho" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_espejo_derecho" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Vidrios</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_vidrios" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_vidrios" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Radio</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_radio" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_radio" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Pantalla</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_pantalla" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_pantalla" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Encendedor</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_encendedor" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_encendedor" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Antena</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_antena" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_antena" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Controles de Puertas</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_controles_puertas" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_controles_puertas" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Cargador Celular</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_cargador_celular" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_cargador_celular" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Triángulos</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_triangulos" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_triangulos" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Cubresol</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_cubresol" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_cubresol" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Herramientas</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_herramientas" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_herramientas" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Gato</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_gato" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_gato" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Llanta de Refacción</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_llanta_refaccion" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_llanta_refaccion" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Faros/Lunas</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_faros_lunas" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_faros_lunas" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Tapa de Gasolina</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_tapa_gasolina" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_tapa_gasolina" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Placas</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_placas" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_placas" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Tapetes</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_tapetes" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_tapetes" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Extintor</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_extintor" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_extintor" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Llave de Tuercas</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_llave_tuercas" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_llave_tuercas" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="item-row">
+                        <span class="item-name">Luz de Airbag</span>
+                        <div class="radio-options">
+                            <label class="radio-option"><input type="radio" name="item_luz_airbag" value="Sí"> Sí</label>
+                            <label class="radio-option"><input type="radio" name="item_luz_airbag" value="No"> No</label>
+                        </div>
+                    </div>
                 </div>
                 <label class="campo-requerido">Kilometraje:
                     <input type="number" name="kilometraje" required min="0">
@@ -534,7 +683,7 @@
         let croquisStrokes = [];
         let currentCroquisStroke = [];
 
-        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMy9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAzNC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LXdhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Helper to get mouse/touch position relative to canvas
         function getPosicion(clientX, clientY, canvasElement) {
@@ -589,7 +738,8 @@
                 offsetX = (width - drawWidth) / 2;
             }
 
-            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height); // Clear
+            croquisCtx.clearRect(0, 0, croquisCanvas.width, croquisCanvas.height); // Clear before drawing base image
+            croquisCtx.fillRect(0, 0, croquisCanvas.width, croquisCanvas.height); // Fill background
             croquisCtx.drawImage(croquisBaseImage, offsetX, offsetY, drawWidth, drawHeight);
         }
 
@@ -881,27 +1031,35 @@
             doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 170);
             doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 175);
 
-            if (datos.items && datos.items.length > 0) {
-                doc.text('Items verificados:', 14, 185);
-                const itemsLines = doc.splitTextToSize(datos.items.join(', '), 180);
-                doc.text(itemsLines, 14, 190);
+            // Dynamically add verified items with 'Sí'/'No' status
+            let yItems = 185;
+            doc.text('Items verificados:', 14, yItems);
+            yItems += 7;
+            for (const key in datos.items_verificados) {
+                if (datos.items_verificados.hasOwnProperty(key)) {
+                    const itemName = key.replace('item_', '').replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()); // Format name
+                    const itemStatus = datos.items_verificados[key];
+                    doc.text(`- ${itemName}: ${itemStatus}`, 18, yItems);
+                    yItems += 5;
+                }
             }
+
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Croquis de Carrocería', 14, 205);
+            doc.text('Croquis de Carrocería', 14, yItems + 5); // Adjust Y position based on items
             if (datos.croquisImagen && !esCroquisVacioOriginal()) {
                 try {
-                    doc.addImage(datos.croquisImagen, 'PNG', 14, 210, 180, 70);
+                    doc.addImage(datos.croquisImagen, 'PNG', 14, yItems + 10, 180, 70); // Adjust Y position
                 } catch (e) {
                     doc.setFontSize(10);
                     doc.setTextColor(150, 150, 150);
-                    doc.text('No se marcaron desperfectos en el croquis.', 14, 220);
+                    doc.text('No se marcaron desperfectos en el croquis.', 14, yItems + 20); // Adjust Y position
                 }
             } else {
                 doc.setFontSize(10);
                 doc.setTextColor(150, 150, 150);
-                doc.text('No se marcaron desperfectos en el croquis.', 14, 220);
+                doc.text('No se marcaron desperfectos en el croquis.', 14, yItems + 20); // Adjust Y position
             }
 
             doc.addPage();
@@ -968,6 +1126,30 @@
                 }
             });
 
+            // Validate that an option (Sí/No) is selected for each item
+            const itemRadios = document.querySelectorAll('.checkbox-group input[type="radio"]');
+            const itemNames = new Set();
+            itemRadios.forEach(radio => itemNames.add(radio.name));
+
+            itemNames.forEach(name => {
+                const checkedOption = document.querySelector(`input[name="${name}"]:checked`);
+                if (!checkedOption) {
+                    allValid = false;
+                    // You might want to add a visual indicator here for the user
+                    // For example, highlight the row or add a message.
+                    const itemRow = document.querySelector(`input[name="${name}"]`).closest('.item-row');
+                    if (itemRow) {
+                        itemRow.style.border = '1px solid var(--color-error)';
+                    }
+                } else {
+                     const itemRow = document.querySelector(`input[name="${name}"]`).closest('.item-row');
+                    if (itemRow) {
+                        itemRow.style.border = '1px solid rgba(0, 86, 179, 0.15)'; // Reset border
+                    }
+                }
+            });
+
+
             const autorizaciones = document.querySelectorAll('input[name="autorizacion"]');
             let algunaAutorizacionSeleccionada = false;
             autorizaciones.forEach(checkbox => {
@@ -985,7 +1167,7 @@
                 const datos = obtenerDatosFormulario();
                 generarPDF(datos);
             } else {
-                alert('Por favor, complete todos los campos requeridos y seleccione al menos una autorización.');
+                alert('Por favor, complete todos los campos requeridos, seleccione una opción para cada item verificado y seleccione al menos una autorización.');
             }
         });
 
@@ -994,14 +1176,24 @@
             const formData = new FormData(form);
             const datos = {};
 
+            // Collect standard form data
             for (let [key, value] of formData.entries()) {
-                if (key === 'items' || key === 'autorizacion') {
+                // Special handling for checkboxes which can have multiple values
+                if (key === 'autorizacion') {
                     if (!datos[key]) datos[key] = [];
                     datos[key].push(value);
-                } else {
+                } else if (!key.startsWith('item_')) { // Exclude item radios for now
                     datos[key] = value;
                 }
             }
+
+            // Collect item verification data
+            datos.items_verificados = {};
+            const itemRadios = document.querySelectorAll('.checkbox-group input[type="radio"]:checked');
+            itemRadios.forEach(radio => {
+                datos.items_verificados[radio.name] = radio.value;
+            });
+
 
             datos.firmaImagen = obtenerFirmaComoImagen();
             datos.croquisImagen = obtenerCroquisComoImagen();
@@ -1035,6 +1227,14 @@
                 limpiarCroquis();
                 document.querySelectorAll('#formularioRecepcion [required]').forEach(input => {
                     input.style.borderColor = 'var(--color-borde)';
+                });
+                // Clear radio selections for items
+                document.querySelectorAll('.checkbox-group input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                // Reset border for item rows
+                document.querySelectorAll('.checkbox-group .item-row').forEach(row => {
+                    row.style.border = '1px solid rgba(0, 86, 179, 0.15)';
                 });
             }, 0);
         });

@@ -704,7 +704,7 @@
         let croquisStrokes = [];
         let currentCroquisStroke = [];
 
-        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAzNC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LXdhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
+        const IMAGEN_CROQUIS_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjlmOWY5Ii8+PHBhdGggZD0iTTE1MCAxNTBINjUwVjMwMEgxNTBaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD09MiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNTAiIHI9IjQwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD09MiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMDAiIHk9IjE1MCIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNTAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0xNTAgMTUwTDMwMCA1MEw2NTAgMTUwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjQwMCIgeT0iMTAwIiBmb250LXdhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2NjYiPkNhcnJvY2Vyw61hIGRlbCB2ZWhpY3VsbzwvdGV4dD48L3N2Zz4=';
 
         // Helper to get mouse/touch position relative to canvas
         function getPosicion(clientX, clientY, canvasElement) {
@@ -1052,47 +1052,65 @@
             doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 170);
             doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 175);
 
-            // Dynamically add verified items with 'Sí'/'No' status
-            let yItems = 185;
-            doc.text('Items verificados:', 14, yItems);
-            yItems += 7;
-            for (const key in datos.items_verificados) {
-                if (datos.items_verificados.hasOwnProperty(key)) {
-                    const itemName = key.replace('item_', '').replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()); // Format name
-                    const itemStatus = datos.items_verificados[key];
-                    doc.text(`- ${itemName}: ${itemStatus}`, 18, yItems);
-                    yItems += 5;
+            // Improved display for "Items verificados"
+            let startYItems = 185;
+            doc.text('Items verificados:', 14, startYItems);
+            startYItems += 7;
+
+            const items = Object.keys(datos.items_verificados).map(key => {
+                const itemName = key.replace('item_', '').replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                const itemStatus = datos.items_verificados[key];
+                return `${itemName}: ${itemStatus}`;
+            });
+
+            const col1X = 18;
+            const col2X = 105; // Roughly middle of the page for a second column
+            let currentY = startYItems;
+            const lineHeight = 5; // Space between lines
+
+            for (let i = 0; i < items.length; i++) {
+                if (i % 2 === 0) { // First column
+                    doc.text(`- ${items[i]}`, col1X, currentY);
+                    if (i + 1 === items.length) { // If it's the last item and it's in the first column
+                        currentY += lineHeight;
+                    }
+                } else { // Second column
+                    doc.text(`- ${items[i]}`, col2X, currentY);
+                    currentY += lineHeight; // Move to next line after placing an item in the second column
                 }
             }
-
+            
+            // Add new page for Croquis, Firma and Autorizaciones
+            doc.addPage();
+            let yPos = 15; // Start Y position for new page
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Croquis de Carrocería', 14, yItems + 5); // Adjust Y position based on items
+            doc.text('Croquis de Carrocería', 14, yPos);
             if (datos.croquisImagen && !esCroquisVacioOriginal()) {
                 try {
-                    doc.addImage(datos.croquisImagen, 'PNG', 14, yItems + 10, 180, 70); // Adjust Y position
+                    doc.addImage(datos.croquisImagen, 'PNG', 15, yPos + 5, 180, 70); // Adjust Y position and center
+                    yPos += 75; // Move Y position after image
                 } catch (e) {
                     doc.setFontSize(10);
                     doc.setTextColor(150, 150, 150);
-                    doc.text('No se marcaron desperfectos en el croquis.', 14, yItems + 20); // Adjust Y position
+                    doc.text('No se marcaron desperfectos en el croquis.', 14, yPos + 5);
+                    yPos += 15;
                 }
             } else {
                 doc.setFontSize(10);
                 doc.setTextColor(150, 150, 150);
-                doc.text('No se marcaron desperfectos en el croquis.', 14, yItems + 20); // Adjust Y position
+                doc.text('No se marcaron desperfectos en el croquis.', 14, yPos + 5);
+                yPos += 15;
             }
-
-            doc.addPage();
-            let yPos = 15;
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Firma del Cliente', 14, yPos);
+            doc.text('Firma del Cliente', 14, yPos + 10);
             if (datos.firmaImagen && !esCanvasVacio(canvas)) {
                 try {
-                    doc.addImage(datos.firmaImagen, 'PNG', 14, yPos + 5, 80, 40);
-                    yPos += 45;
+                    doc.addImage(datos.firmaImagen, 'PNG', 14, yPos + 15, 80, 40);
+                    yPos += 60;
                     doc.setFontSize(9);
                     doc.setTextColor(100, 100, 100);
                     doc.text('Firma del Cliente', 14, yPos);
@@ -1100,16 +1118,16 @@
                 } catch (e) {
                     doc.setFontSize(10);
                     doc.setTextColor(150, 150, 150);
-                    doc.text('______________________________', 14, yPos + 5);
-                    doc.text('Espacio para firma', 14, yPos + 10);
-                    yPos += 20;
+                    doc.text('______________________________', 14, yPos + 15);
+                    doc.text('Espacio para firma', 14, yPos + 20);
+                    yPos += 30;
                 }
             } else {
                 doc.setFontSize(10);
                 doc.setTextColor(150, 150, 150);
-                doc.text('______________________________', 14, yPos + 5);
-                doc.text('Espacio para firma', 14, yPos + 10);
-                yPos += 20;
+                doc.text('______________________________', 14, yPos + 15);
+                doc.text('Espacio para firma', 14, yPos + 20);
+                yPos += 30;
             }
 
             doc.setFontSize(13);

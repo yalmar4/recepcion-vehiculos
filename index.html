@@ -422,6 +422,9 @@
                 <label class="campo-requerido">Nombre:
                     <input type="text" name="nombre" required>
                 </label>
+                <label class="campo-requerido">Cédula/RIF:
+                    <input type="text" name="cedula_rif" required>
+                </label>
                 <label>Dirección:
                     <input type="text" name="direccion">
                 </label>
@@ -1020,40 +1023,41 @@
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
             doc.text(`Nombre: ${datos.nombre || 'N/A'}`, 14, 66);
-            doc.text(`Dirección: ${datos.direccion || 'N/A'}`, 14, 71);
-            doc.text(`Teléfono: ${datos.telefono || 'N/A'}`, 14, 76);
-            doc.text(`Email: ${datos.email || 'N/A'}`, 14, 81);
+            doc.text(`Cédula/RIF: ${datos.cedula_rif || 'N/A'}`, 14, 71); // Added Cédula/RIF
+            doc.text(`Dirección: ${datos.direccion || 'N/A'}`, 14, 76);
+            doc.text(`Teléfono: ${datos.telefono || 'N/A'}`, 14, 81);
+            doc.text(`Email: ${datos.email || 'N/A'}`, 14, 86); // Adjusted Y position
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Datos del Vehículo', 14, 91);
+            doc.text('Datos del Vehículo', 14, 96); // Adjusted Y position
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Marca: ${datos.marca || 'N/A'}`, 14, 99);
-            doc.text(`Modelo: ${datos.modelo || 'N/A'}`, 14, 104);
-            doc.text(`Año: ${datos.anio || 'N/A'}`, 14, 109);
-            doc.text(`Color: ${datos.color || 'N/A'}`, 14, 114);
-            doc.text(`Placas: ${datos.placas || 'N/A'}`, 14, 119);
-            doc.text(`VIN: ${datos.vin || 'N/A'}`, 14, 124);
+            doc.text(`Marca: ${datos.marca || 'N/A'}`, 14, 104);
+            doc.text(`Modelo: ${datos.modelo || 'N/A'}`, 14, 109);
+            doc.text(`Año: ${datos.anio || 'N/A'}`, 14, 114);
+            doc.text(`Color: ${datos.color || 'N/A'}`, 14, 119);
+            doc.text(`Placas: ${datos.placas || 'N/A'}`, 14, 124);
+            doc.text(`VIN: ${datos.vin || 'N/A'}`, 14, 129);
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Descripción de la Falla', 14, 134);
+            doc.text('Descripción de la Falla', 14, 139); // Adjusted Y position
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
             const fallaLines = doc.splitTextToSize(datos.falla || 'No especificado', 180);
-            doc.text(fallaLines, 14, 142);
+            doc.text(fallaLines, 14, 147); // Adjusted Y position
 
             doc.setFontSize(13);
             doc.setTextColor(0, 86, 179);
-            doc.text('Recepción del Vehículo', 14, 162);
+            doc.text('Recepción del Vehículo', 14, 167); // Adjusted Y position
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 170);
-            doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 175);
+            doc.text(`Kilometraje: ${datos.kilometraje || 'N/A'}`, 14, 175);
+            doc.text(`Nivel de Gasolina: ${getTextoGasolina(datos.gasolina)}`, 14, 180);
 
             // Improved display for "Items verificados"
-            let startYItems = 185;
+            let startYItems = 190; // Adjusted Y position
             doc.text('Items verificados:', 14, startYItems);
             startYItems += 7;
 
